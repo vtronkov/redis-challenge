@@ -12,6 +12,12 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation("redis.clients:jedis:5.2.0")
+    implementation("org.redisson:redisson:3.45.1")
+    
+    // fixing a warning produced by jedis
+    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.119.Final")
 }
 
 test {

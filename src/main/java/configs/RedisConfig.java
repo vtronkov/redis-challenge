@@ -7,7 +7,11 @@ public class RedisConfig {
     public static final String HOST = "localhost";
     public static final int PORT = 6379;
     public static final String REDIS_ADDRESS = String.format("redis://%s:%s", HOST, PORT);
+    
     public static final String PROCESS_MESSAGES_LOCK = "process-messages-lock";
+    // TODO: play with the wait and lease time. These are most-probably not optimal.
+    public static final int REDIS_LOCK_WAIT_TIME_MS = 5;
+    public static final int REDIS_LOCK_LEASE_TIME_MS = 10;
     
     private RedisConfig() {}
     

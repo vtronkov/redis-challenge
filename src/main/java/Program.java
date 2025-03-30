@@ -55,7 +55,6 @@ public class Program {
     
     /*
     TODOs:
-    - Use log4j for logging
     - The consumer log should be decoupled from the consumer
         - the consumer will count the processed messages and put them into redis
         - another thread will read all the consumers counts every N seconds, log them and clean them

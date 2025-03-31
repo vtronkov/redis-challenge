@@ -16,9 +16,10 @@ dependencies {
     implementation("redis.clients:jedis:5.2.0")
     implementation("org.redisson:redisson:3.45.1")
     implementation("org.slf4j:slf4j-api:2.0.16")
-    
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
+
     // fixing a warning produced by jedis
-    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.119.Final")
+    implementation("io.netty:netty-resolver-dns-native-macos:4.1.118.Final:osx-aarch_64")
 }
 
 test {

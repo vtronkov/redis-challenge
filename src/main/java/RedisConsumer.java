@@ -48,7 +48,6 @@ public class RedisConsumer {
                 try {
                     if (lock.tryLock(REDIS_LOCK_WAIT_TIME_MS, REDIS_LOCK_LEASE_TIME_MS, TimeUnit.MILLISECONDS)) {
                         messageProcessor.process(id, message);
-                        // TODO: should I add lock.unlock(); - test it but it seems like it
                     }
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);

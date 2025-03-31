@@ -12,7 +12,6 @@ public class Program {
         int numberOfConsumers = getAndValidateNumberOfConsumers(args);
         cleanConsumerIds();
         startConsumers(numberOfConsumers);
-        // TODO: add the monitoring to this thread and remove the blockCurrentThread
         processedMessageReport();
     }
 

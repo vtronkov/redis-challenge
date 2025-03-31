@@ -11,8 +11,8 @@ public class RedisConfig {
     public static final String PROCESS_MESSAGES_LOCK = "process-messages-lock";
     
     // Caution: These settings will vary based on the server's capacity and the message processing time.
-    public static final int REDIS_LOCK_WAIT_TIME_MS = 0;
-    public static final int REDIS_LOCK_LEASE_TIME_MS = 4;
+    public static final int REDIS_LOCK_WAIT_TIME_MS = 5;
+    public static final int REDIS_LOCK_LEASE_TIME_MS = 5;
     
     private RedisConfig() {}
     

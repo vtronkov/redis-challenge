@@ -10,6 +10,7 @@ public class ApplicationConfig {
 
     public static final String PUBLISHED_MESSAGES_KEY = "messages:published";
     public static final String PROCESSED_MESSAGES_KEY = "messages:processed";
+    public static final String PROCESSED_MESSAGES_BOOLEAN_KEY = "messages:processed:boolean";
     public static final String PROCESSED_MESSAGES_COUNT_KEY = "messages:processed:count";
     public static final String CONSUMER_IDS_KEY = "consumer:ids";
     

@@ -22,8 +22,8 @@ public class RedisConsumer {
     private final String id;
     private final Jedis jedis;
 
-    public RedisConsumer(String id, String redisHost, int redisPort) {
-        this.jedis = new Jedis(redisHost, redisPort);
+    public RedisConsumer(String id, Jedis jedis) {
+        this.jedis = jedis;
         jedis.lpush(CONSUMER_IDS_KEY, id);
         this.id = id;
         logger.info("Consumer started:{}", id);

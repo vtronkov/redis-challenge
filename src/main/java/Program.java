@@ -12,6 +12,7 @@ public class Program {
         int numberOfConsumers = getNumberOfConsumers(args);
         cleanConsumerIds();
         startConsumers(numberOfConsumers);
+        // TODO: add the monitoring to this thread and remove the blockCurrentThread
         blockCurrentThread();
     }
 
@@ -37,7 +38,7 @@ public class Program {
         for(int i = 0; i < numberOfConsumers; i++) {
             String consumerId = "consumer-" + i;
             new Thread(() -> {
-                RedisConsumer consumer = new RedisConsumer(consumerId, HOST, PORT);
+                RedisConsumer consumer = new RedisConsumer(consumerId, new Jedis(HOST, PORT));
                 try {
                     consumer.subscribe();
                 } catch (Exception e) {

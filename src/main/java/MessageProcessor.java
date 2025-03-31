@@ -1,19 +1,19 @@
 import static configs.ApplicationConfig.PROCESSED_MESSAGES_COUNT_KEY;
+import static configs.ApplicationConfig.PROCESSED_MESSAGES_KEY;
 import static configs.RedisConfig.HOST;
 import static configs.RedisConfig.PORT;
 
+import java.util.Map;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.StreamEntryID;
 
 public class MessageProcessor {
 
     private final Jedis jedis = new Jedis(HOST, PORT);
     
-    public void process(String consumerId, String channel, String message) {
+    public void process(String consumerId, String message) {
         String processedMessage = message.replace("}", ", \"processed_by\": \"" + consumerId + "\"}");
-
-        // TODO: add the processed message to Redis Stream
-        // TODO: update the processed message count in Redis
-
+        jedis.xadd(PROCESSED_MESSAGES_KEY, StreamEntryID.NEW_ENTRY, Map.of("message", processedMessage));
         incrementProcessedMessageCount(consumerId);
     }
 

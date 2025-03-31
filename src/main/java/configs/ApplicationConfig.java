@@ -6,10 +6,13 @@ public class ApplicationConfig {
 
     // Arbitrary number of max consumers. It should be based on the deployed server's capacity.
     public static final int MAX_CONSUMERS = 10;
+    public static final int PROCESSED_MESSAGE_REPORT_INTERVAL = 3000; // 3 seconds
 
     public static final String PUBLISHED_MESSAGES_KEY = "messages:published";
     public static final String PROCESSED_MESSAGES_KEY = "messages:processed";
+    public static final String PROCESSED_MESSAGES_COUNT_KEY = "messages:processed:count";
     public static final String CONSUMER_IDS_KEY = "consumer:ids";
+    
     
     private ApplicationConfig() {}
 }

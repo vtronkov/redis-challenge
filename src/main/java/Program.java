@@ -1,19 +1,19 @@
 import static configs.ApplicationConfig.CONSUMER_IDS_KEY;
 import static configs.ApplicationConfig.MAX_CONSUMERS;
+import static configs.ApplicationConfig.PROCESSED_MESSAGE_REPORT_INTERVAL;
 import static configs.RedisConfig.HOST;
 import static configs.RedisConfig.PORT;
 
-import java.util.concurrent.CountDownLatch;
 import redis.clients.jedis.Jedis;
 
 public class Program {
 
-    public static void main(String[] args) throws Exception {
-        int numberOfConsumers = getNumberOfConsumers(args);
+    public static void main(String[] args) {
+        int numberOfConsumers = getAndValidateNumberOfConsumers(args);
         cleanConsumerIds();
         startConsumers(numberOfConsumers);
         // TODO: add the monitoring to this thread and remove the blockCurrentThread
-        blockCurrentThread();
+        processedMessageReport();
     }
 
     private static void cleanConsumerIds() {
@@ -22,7 +22,7 @@ public class Program {
         jedis.close();
     }
 
-    private static int getNumberOfConsumers(String[] args) {
+    private static int getAndValidateNumberOfConsumers(String[] args) {
         int numberOfConsumers = args.length > 0 ? Integer.parseInt(args[0]) : 1;
         if(numberOfConsumers <= 0) {
             throw new IllegalArgumentException("Number of consumers must be greater than 0");
@@ -38,7 +38,8 @@ public class Program {
         for(int i = 0; i < numberOfConsumers; i++) {
             String consumerId = "consumer-" + i;
             new Thread(() -> {
-                RedisConsumer consumer = new RedisConsumer(consumerId, new Jedis(HOST, PORT));
+                MessageProcessor messageProcessor = new MessageProcessor();
+                RedisConsumer consumer = new RedisConsumer(consumerId, messageProcessor);
                 try {
                     consumer.subscribe();
                 } catch (Exception e) {
@@ -48,18 +49,14 @@ public class Program {
         }
     }
     
-    // Use CountDownLatch to block the main thread and keep the program running
-    private static void blockCurrentThread() throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
-        latch.await();
+    private static void processedMessageReport() {
+        while (true) {
+            try {
+                Thread.sleep(PROCESSED_MESSAGE_REPORT_INTERVAL);
+                ProcessedMessagesReporter.report();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
-    
-    /*
-    TODOs:
-    - The consumer log should be decoupled from the consumer
-        - the consumer will count the processed messages and put them into redis
-        - another thread will read all the consumers counts every N seconds, log them and clean them
-    - Create a separate class for processing the message
-     */
-
 }

@@ -23,8 +23,8 @@ public class RedisConsumer {
     private static final Logger logger = LoggerFactory.getLogger(RedisConsumer.class);
 
     private final String id;
-    private final Jedis jedis = new Jedis(HOST, PORT);
     private final MessageProcessor messageProcessor;
+    private final Jedis jedis = new Jedis(HOST, PORT);
 
     public RedisConsumer(String id, MessageProcessor messageProcessor) {
         this.id = id;
@@ -32,6 +32,7 @@ public class RedisConsumer {
         
         jedis.lpush(CONSUMER_IDS_KEY, id);
         jedis.hset(PROCESSED_MESSAGES_COUNT_KEY, id, "0");
+        
         logger.info("Consumer started: {}", id);
     }
 

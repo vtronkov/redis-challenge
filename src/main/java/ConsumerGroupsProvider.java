@@ -1,5 +1,4 @@
 import static configs.ApplicationConfig.CONSUMER_IDS_KEY;
-import static configs.ApplicationConfig.MAX_CONSUMERS;
 import static configs.RedisConfig.HOST;
 import static configs.RedisConfig.PORT;
 
@@ -12,21 +11,9 @@ public class ConsumerGroupsProvider {
 
     private ConsumerGroupsProvider() {}
     
-    public static void run(String[] args) {
-        int numberOfConsumers = getAndValidateNumberOfConsumers(args);
+    public static void run(int numberOfConsumers) {
         cleanConsumerIds();
         startConsumers(numberOfConsumers);
-    }
-
-    private static int getAndValidateNumberOfConsumers(String[] args) {
-        int numberOfConsumers = args.length > 0 ? Integer.parseInt(args[0]) : 1;
-        if(numberOfConsumers <= 0) {
-            throw new IllegalArgumentException("Number of consumers must be greater than 0");
-        }
-        if(numberOfConsumers > MAX_CONSUMERS) {
-            throw new IllegalArgumentException("Number of consumers must be less than or equal to " + MAX_CONSUMERS);
-        }
-        return numberOfConsumers;
     }
     
     private static void cleanConsumerIds() {

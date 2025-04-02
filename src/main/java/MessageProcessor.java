@@ -22,7 +22,8 @@ public class MessageProcessor {
         jedis.hset(PROCESSED_MESSAGES_BOOLEAN_KEY, messageId, "true");
         
         String processedMessage = new JSONObject(message).accumulate("processed", "true").toString();
-        Map<String, String> streamData = Map.of("message", processedMessage, "processed_by", consumerId);
+        Map<String, String> streamData = 
+            Map.of("message_id", messageId, "message", processedMessage, "processed_by", consumerId);
         jedis.xadd(PROCESSED_MESSAGES_KEY, StreamEntryID.NEW_ENTRY, streamData);
         incrementProcessedMessageCount(consumerId);
     }

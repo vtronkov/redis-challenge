@@ -17,12 +17,6 @@ public class ConsumerGroupsProvider {
         processedMessageReport();
     }
 
-    private static void cleanConsumerIds() {
-        Jedis jedis = new Jedis(HOST, PORT);
-        jedis.del(CONSUMER_IDS_KEY);
-        jedis.close();
-    }
-
     private static int getAndValidateNumberOfConsumers(String[] args) {
         int numberOfConsumers = args.length > 0 ? Integer.parseInt(args[0]) : 1;
         if(numberOfConsumers <= 0) {
@@ -34,18 +28,20 @@ public class ConsumerGroupsProvider {
         }
         return numberOfConsumers;
     }
-
+    
+    private static void cleanConsumerIds() {
+        Jedis jedis = new Jedis(HOST, PORT);
+        jedis.del(CONSUMER_IDS_KEY);
+        jedis.close();
+    }
+    
     private static void startConsumers(int numberOfConsumers) {
         for(int i = 0; i < numberOfConsumers; i++) {
             String consumerId = "consumer-" + i;
             new Thread(() -> {
                 MessageProcessor messageProcessor = new MessageProcessor();
                 RedisConsumer consumer = new RedisConsumer(consumerId, messageProcessor);
-                try {
-                    consumer.subscribe();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                consumer.subscribe();
             }).start();
         }
     }

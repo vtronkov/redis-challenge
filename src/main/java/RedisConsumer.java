@@ -1,9 +1,9 @@
 import static configs.ApplicationConfig.CONSUMER_IDS_KEY;
 import static configs.ApplicationConfig.PROCESSED_MESSAGES_COUNT_KEY;
+import static configs.ApplicationConfig.PROCESS_MESSAGES_LOCK;
 import static configs.ApplicationConfig.PUBLISHED_MESSAGES_KEY;
 import static configs.RedisConfig.HOST;
 import static configs.RedisConfig.PORT;
-import static configs.RedisConfig.PROCESS_MESSAGES_LOCK;
 import static configs.RedisConfig.REDIS_ADDRESS;
 import static configs.RedisConfig.REDIS_LOCK_LEASE_TIME_MS;
 import static configs.RedisConfig.REDIS_LOCK_WAIT_TIME_MS;
@@ -55,6 +55,7 @@ public class RedisConsumer {
 
             }
         }, PUBLISHED_MESSAGES_KEY);
+        
     }
 
 }

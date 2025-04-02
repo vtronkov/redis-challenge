@@ -9,15 +9,16 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 public class ProcessedMessagesReporter {
-
+    
+    private static final Jedis jedis = new Jedis(HOST, PORT);
+    
     private static final Logger logger = LoggerFactory.getLogger(ProcessedMessagesReporter.class);
-
+    
     public static void report() {
         if(!configs.ApplicationConfig.ENABLE_MONITORING) {
             return;
         }
         
-        Jedis jedis = new Jedis(HOST, PORT);
         logger.info("Reporting processed messages count for the last {} seconds:", PROCESSED_MESSAGE_REPORT_INTERVAL / 1000);
         Map<String, String> processedMessagesCount = jedis.hgetAll(PROCESSED_MESSAGES_COUNT_KEY);
         if(processedMessagesCount.isEmpty()) {

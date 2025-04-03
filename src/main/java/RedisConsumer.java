@@ -1,6 +1,5 @@
 import static configs.ApplicationConfig.CONSUMER_IDS_KEY;
 import static configs.ApplicationConfig.PROCESSED_MESSAGES_COUNT_KEY;
-import static configs.ApplicationConfig.PROCESS_MESSAGES_LOCK;
 import static configs.ApplicationConfig.PUBLISHED_MESSAGES_KEY;
 import static configs.RedisConfig.HOST;
 import static configs.RedisConfig.PORT;
@@ -41,12 +40,12 @@ public class RedisConsumer {
         config.useSingleServer().setAddress(REDIS_ADDRESS);
 
         RedissonClient redisson = Redisson.create(config);
-        RLock lock = redisson.getLock(PROCESS_MESSAGES_LOCK);
 
         jedis.subscribe(new JedisPubSub() {
             @Override
             public void onMessage(String channel, String message) {
                 try {
+                    RLock lock = redisson.getLock(message);
                     if (lock.tryLock(REDIS_LOCK_WAIT_TIME_MS, REDIS_LOCK_LEASE_TIME_MS, TimeUnit.MILLISECONDS)) {
                         messageProcessor.process(id, message);
                     }

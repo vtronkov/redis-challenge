@@ -14,7 +14,6 @@ public class ApplicationConfig {
     public static final String PROCESSED_MESSAGES_SET_KEY = "messages:processed:set";
     public static final String PROCESSED_MESSAGES_COUNT_KEY = "messages:processed:count";
     public static final String CONSUMER_IDS_KEY = "consumer:ids";
-    public static final String PROCESS_MESSAGES_LOCK = "process-messages-lock";
     
     private ApplicationConfig() {}
 }

@@ -24,7 +24,7 @@ public class MessageProcessor {
         String processedMessage = processMessage(message);
         addToRedisStream(messageId, processedMessage, consumerId);
         incrementProcessedMessageCount(consumerId);
-        jedis.sadd(PROCESSED_MESSAGES_SET_KEY, messageId); // Mark as processed
+        markMessageAsProcessed(messageId);
     }
 
     private static String processMessage(String message) {
@@ -51,6 +51,10 @@ public class MessageProcessor {
         
         int count = Integer.parseInt(currentCount);
         jedis.hset(PROCESSED_MESSAGES_COUNT_KEY, consumerId, String.valueOf(++count));
+    }
+
+    private void markMessageAsProcessed(String messageId) {
+        jedis.sadd(PROCESSED_MESSAGES_SET_KEY, messageId);
     }
 
 }
